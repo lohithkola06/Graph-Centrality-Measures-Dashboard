@@ -1,0 +1,249 @@
+{
+  "metrics": [
+    "betweenness",
+    "closeness",
+    "eigenvalue"
+  ],
+  "k_values": [
+    5,
+    10
+  ],
+  "top_k_by_metric": {
+    "betweenness": {
+      "5": [
+        20,
+        19,
+        5,
+        16,
+        25
+      ],
+      "10": [
+        20,
+        19,
+        5,
+        16,
+        25,
+        1,
+        3,
+        36,
+        27,
+        29
+      ]
+    },
+    "closeness": {
+      "5": [
+        19,
+        20,
+        13,
+        3,
+        5
+      ],
+      "10": [
+        19,
+        20,
+        13,
+        3,
+        5,
+        25,
+        16,
+        36,
+        29,
+        1
+      ]
+    },
+    "eigenvalue": {
+      "5": [
+        25,
+        31,
+        29,
+        20,
+        36
+      ],
+      "10": [
+        25,
+        31,
+        29,
+        20,
+        36,
+        39,
+        23,
+        12,
+        30,
+        37
+      ]
+    }
+  },
+  "pairwise": [
+    {
+      "metric_a": "betweenness",
+      "metric_b": "closeness",
+      "spearman_rank_correlation": 0.9173888387374376,
+      "top_k": [
+        {
+          "k": 5,
+          "metric_a_top_nodes": [
+            20,
+            19,
+            5,
+            16,
+            25
+          ],
+          "metric_b_top_nodes": [
+            19,
+            20,
+            13,
+            3,
+            5
+          ],
+          "overlap_count": 3,
+          "overlap_fraction": 0.6,
+          "jaccard_similarity": 0.42857142857142855
+        },
+        {
+          "k": 10,
+          "metric_a_top_nodes": [
+            20,
+            19,
+            5,
+            16,
+            25,
+            1,
+            3,
+            36,
+            27,
+            29
+          ],
+          "metric_b_top_nodes": [
+            19,
+            20,
+            13,
+            3,
+            5,
+            25,
+            16,
+            36,
+            29,
+            1
+          ],
+          "overlap_count": 9,
+          "overlap_fraction": 0.9,
+          "jaccard_similarity": 0.8181818181818182
+        }
+      ]
+    },
+    {
+      "metric_a": "betweenness",
+      "metric_b": "eigenvalue",
+      "spearman_rank_correlation": 0.33114446529080677,
+      "top_k": [
+        {
+          "k": 5,
+          "metric_a_top_nodes": [
+            20,
+            19,
+            5,
+            16,
+            25
+          ],
+          "metric_b_top_nodes": [
+            25,
+            31,
+            29,
+            20,
+            36
+          ],
+          "overlap_count": 2,
+          "overlap_fraction": 0.4,
+          "jaccard_similarity": 0.25
+        },
+        {
+          "k": 10,
+          "metric_a_top_nodes": [
+            20,
+            19,
+            5,
+            16,
+            25,
+            1,
+            3,
+            36,
+            27,
+            29
+          ],
+          "metric_b_top_nodes": [
+            25,
+            31,
+            29,
+            20,
+            36,
+            39,
+            23,
+            12,
+            30,
+            37
+          ],
+          "overlap_count": 4,
+          "overlap_fraction": 0.4,
+          "jaccard_similarity": 0.25
+        }
+      ]
+    },
+    {
+      "metric_a": "closeness",
+      "metric_b": "eigenvalue",
+      "spearman_rank_correlation": 0.365602149645388,
+      "top_k": [
+        {
+          "k": 5,
+          "metric_a_top_nodes": [
+            19,
+            20,
+            13,
+            3,
+            5
+          ],
+          "metric_b_top_nodes": [
+            25,
+            31,
+            29,
+            20,
+            36
+          ],
+          "overlap_count": 1,
+          "overlap_fraction": 0.2,
+          "jaccard_similarity": 0.1111111111111111
+        },
+        {
+          "k": 10,
+          "metric_a_top_nodes": [
+            19,
+            20,
+            13,
+            3,
+            5,
+            25,
+            16,
+            36,
+            29,
+            1
+          ],
+          "metric_b_top_nodes": [
+            25,
+            31,
+            29,
+            20,
+            36,
+            39,
+            23,
+            12,
+            30,
+            37
+          ],
+          "overlap_count": 4,
+          "overlap_fraction": 0.4,
+          "jaccard_similarity": 0.25
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\title{Architecture Note\\Efficient Implementation and Comparative Analysis of Graph Centrality Measures}
+\author{Project 19}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{System Objective}
+The system provides an end-to-end workflow for graph centrality analysis on unweighted undirected graphs, including algorithm implementation, correctness validation, benchmarking, ranking comparison, plotting, and interactive visualization.
+
+\section{Module Overview}
+Core modules under \texttt{src/} are organized by responsibility:
+\begin{itemize}[leftmargin=*]
+    \item \texttt{graph\_utils.py}: adjacency-list graph model, edge-list loader, synthetic generators, graph summaries, connectivity checks.
+    \item \texttt{closeness.py}: BFS shortest paths and exact closeness centrality.
+    \item \texttt{betweenness.py}: Brandes algorithm for exact betweenness centrality.
+    \item \texttt{eigenvalue.py}: power iteration for eigenvalue centrality with convergence metadata.
+    \item \texttt{validators.py}: structural and ranking sanity checks, optional tiny-graph comparisons against NetworkX.
+    \item \texttt{experiments.py}: synthetic benchmark suite with runtime collection and export.
+    \item \texttt{compare\_rankings.py}: top-$k$ overlap, Jaccard, Spearman, and exportable comparison summaries.
+    \item \texttt{visualize.py}: generation of runtime, distribution, overlap, correlation, and graph highlight plots.
+    \item \texttt{demo.py}: integrated command-line demo for centrality outputs.
+\end{itemize}
+
+Supporting entry points:
+\begin{itemize}[leftmargin=*]
+    \item \texttt{run\_project.py}: centrality demonstration run.
+    \item \texttt{run\_experiments.py}: benchmark execution and export.
+    \item \texttt{run\_analysis.py}: ranking comparison and plot pipeline.
+\end{itemize}
+
+Dashboard modules under \texttt{dashboard/}:
+\begin{itemize}[leftmargin=*]
+    \item \texttt{app.py}: Streamlit application layout and interactions.
+    \item \texttt{viz\_utils.py}: dashboard graph parsing, metric computation, table export, and in-app rendering support.
+\end{itemize}
+
+\section{Data Flow}
+The system follows a staged flow:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Graph acquisition}: synthetic generation or edge-list parsing.
+    \item \textbf{Metric computation}: closeness, betweenness, eigenvalue centrality.
+    \item \textbf{Validation}: deterministic sanity checks and optional micro-comparisons.
+    \item \textbf{Benchmarking}: repeated metric execution across graph families and sizes.
+    \item \textbf{Comparison analysis}: overlap and correlation summaries between ranking outputs.
+    \item \textbf{Visualization}: static plots for runtime and ranking behavior.
+    \item \textbf{Interactive exploration}: dashboard-based ad hoc analysis and CSV export.
+\end{enumerate}
+
+\section{Graph Representation and API}
+Graphs are stored using adjacency lists with contiguous internal node IDs and bidirectional mappings between original labels and internal IDs. This design balances algorithmic efficiency and user-facing interpretability.
+
+\section{Algorithm Integration}
+\subsection{Closeness Centrality}
+For node $v$, with reachable set $R(v)$ and $r = |R(v)|$:
+\[
+S(v)=\sum_{u \in R(v)} d(v,u), \qquad C_{\text{base}}(v)=\frac{r}{S(v)}.
+\]
+The implementation uses BFS from each source and applies reachable-fraction normalization:
+\[
+C(v)=C_{\text{base}}(v)\cdot\frac{r}{n-1}.
+\]
+
+\subsection{Betweenness Centrality}
+The implementation follows Brandes for unweighted undirected graphs. For each source $s$, BFS builds shortest-path predecessor sets and path counts $\sigma$. Reverse traversal accumulates dependencies and aggregates node contributions. Undirected double counting is corrected, and optional normalization is applied:
+\[
+\frac{2}{(n-1)(n-2)}.
+\]
+
+\subsection{Eigenvalue Centrality}
+Power iteration estimates the principal eigenvector:
+\[
+x^{(k+1)}=\frac{(A+\alpha I)x^{(k)}}{\|(A+\alpha I)x^{(k)}\|_2},
+\]
+where a small shift $\alpha$ improves convergence stability for bipartite structures.
+
+\section{Benchmarking Pipeline}
+The benchmark runner executes each metric across synthetic graph families with controlled sizes and fixed seeds where randomization is used. For each graph/metric pair, it stores:
+\begin{itemize}[leftmargin=*]
+    \item graph family and configuration,
+    \item node and edge counts,
+    \item connectivity,
+    \item runtime measured by \texttt{time.perf\_counter},
+    \item status and metric-specific notes.
+\end{itemize}
+Exports are written to CSV, JSON, and timestamped log files under \texttt{outputs/}.
+
+\section{Analysis Pipeline}
+The analysis runner consumes benchmark output and computed centrality vectors to produce:
+\begin{itemize}[leftmargin=*]
+    \item pairwise top-$k$ overlap and Jaccard similarity,
+    \item pairwise Spearman rank correlations,
+    \item summary exports to \texttt{outputs/comparison\_results.csv} and \texttt{outputs/comparison\_results.json},
+    \item plot assets in \texttt{outputs/plots/} and copied report figures in \texttt{report/figures/}.
+\end{itemize}
+
+\section{Dashboard Structure}
+The Streamlit dashboard supports:
+\begin{itemize}[leftmargin=*]
+    \item synthetic graph selection and configurable parameters,
+    \item edge-list upload and parsing,
+    \item graph summary metrics,
+    \item selected metric computation,
+    \item node-level visualization with centrality-based encoding,
+    \item top-$k$ ranking and pairwise comparison display,
+    \item CSV export of computed metric scores.
+\end{itemize}
+
+\section{Limitations}
+\begin{itemize}[leftmargin=*]
+    \item Primary algorithmic support is restricted to unweighted undirected graphs.
+    \item Benchmark workloads are synthetic and moderate in size by design.
+    \item Dashboard interaction is tuned for small-to-medium graph sizes, not large-scale interactive rendering.
+    \item Advanced statistical significance and uncertainty analysis across rankings are not yet integrated.
+\end{itemize}
+
+\section{Planned Extensions}
+\begin{itemize}[leftmargin=*]
+    \item weighted and directed graph centrality variants,
+    \item larger real-world dataset ingestion and curation,
+    \item richer comparison statistics and stability analyses,
+    \item enhanced dashboard support for larger graph exploration.
+\end{itemize}
+
+\end{document}

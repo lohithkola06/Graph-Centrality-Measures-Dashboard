@@ -1,0 +1,27 @@
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Streamlit local state
+.streamlit/
+
+# LaTeX build artifacts
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# OS/editor files
+.DS_Store
+
+# Temporary local files
+*.tmp
+*.swp
